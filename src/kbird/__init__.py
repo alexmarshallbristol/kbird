@@ -1,5 +1,6 @@
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
+from contextlib import contextmanager
 
 _stops = [0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
 _red   = [0.2082, 0.0592, 0.0780, 0.0232, 0.1802, 0.5301, 0.8186, 0.9956, 0.9764]
@@ -12,12 +13,30 @@ _cdict = {
     'blue':  [[_stops[i], _blue[i], _blue[i]] for i in range(len(_stops))]
 }
 
-kbird = LinearSegmentedColormap('kBird', _cdict)
+kbird_cmap = LinearSegmentedColormap('kBird', _cdict)
 
-if 'kBird' not in mpl.colormaps:
-    mpl.colormaps.register(kbird, name='kBird')
-    mpl.colormaps.register(kbird, name='kbird')
+def set():
+    if 'kBird' not in mpl.colormaps:
+        mpl.colormaps.register(kbird_cmap, name='kBird')
+        mpl.colormaps.register(kbird_cmap, name='kbird')
 
-mpl.rcParams['image.cmap'] = 'kBird'
+    mpl.rcParams['image.cmap'] = 'kBird'
 
-__all__ = ['kbird']
+
+@contextmanager
+def style():
+    """Context manager to temporarily apply kBird defaults."""
+    # Register if not already done
+    if 'kBird' not in mpl.colormaps:
+        mpl.colormaps.register(kbird_cmap, name='kBird')
+        
+    old_cmap = mpl.rcParams['image.cmap']
+    mpl.rcParams['image.cmap'] = 'kBird'
+    try:
+        yield
+    finally:
+        # Restore original default afterward
+        mpl.rcParams['image.cmap'] = old_cmap
+
+
+__all__ = ['kbird', 'set']

@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import kbird # trigger auto-injection of the kBird colormap - makes it default
 
+kbird.set()
+
 x = np.linspace(-3, 3, 256)
 y = np.linspace(-3, 3, 256)
 X, Y = np.meshgrid(x, y)

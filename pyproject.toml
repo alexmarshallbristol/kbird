@@ -1,7 +1,7 @@
 [project]
 name = "kbird"
 version = "0.1.0"
-description = "Add your description here"
+description = "kBird colourmap is way better than viridis"
 readme = "README.md"
 authors = [
     { name = "Alex Marshall", email = "a.marshall@fathom.global" }
